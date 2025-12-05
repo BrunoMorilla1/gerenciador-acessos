@@ -1,0 +1,87 @@
+# ==========================================
+# PERFIL ATIVO
+# ==========================================
+spring:
+  profiles:
+    active: prod
+
+  # ==========================================
+  # CONFIGURAÇÕES COMUNS
+  # ==========================================
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+
+# Segurança default (fallback)
+security:
+  user:
+    name: ${ADMIN_USER:admin}
+    password: ${ADMIN_PASSWORD:admin123}
+    roles: ADMIN
+
+# JWT
+jwt:
+  secret: ${JWT_SECRET:uma-chave-secreta-forte-de-pelo-menos-32-bytes-para-producao}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+# Job
+job:
+  expiracao:
+    dias-alerta: 7
+
+# ==========================================
+# PERFIL DEV - H2
+# ==========================================
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:h2:mem:gerenciador_acessos
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# ==========================================
+# PERFIL PROD - POSTGRESQL
+# ==========================================
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/gerenciador_acessos}
+    username: ${DB_USERNAME:gerenciador-acessos}
+    password: ${DB_PASSWORD:1234}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    spring:
+      jpa:
+        hibernate:
+          ddl-auto=update:

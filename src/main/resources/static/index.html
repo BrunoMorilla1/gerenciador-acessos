@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Acessos - Frontend Simples</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .btn { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+        .btn:hover { background-color: #0056b3; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; }
+        .message { padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .acesso-item { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        .acesso-item strong { display: block; margin-bottom: 5px; }
+        #notificacoes-list { list-style: none; padding: 0; }
+        #notificacoes-list li { padding: 8px; margin-bottom: 5px; border-radius: 4px; }
+        .CRITICO { background-color: #f8d7da; color: #721c24; }
+        .ALERTA { background-color: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciador de Acessos</h1>
+
+        <div id="auth-section" class="section">
+            <h2>Login</h2>
+            <div id="auth-message" class="message error" style="display:none;"></div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" value="user@test.com">
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" value="user123">
+            </div>
+            <button class="btn" onclick="app.login()">Entrar</button>
+        </div>
+
+        <div id="app-section" style="display:none;">
+            <div class="section warning">
+                Bem-vindo(a), <span id="user-name"></span> (<span id="user-role"></span>)!
+                <button class="btn btn-danger" onclick="app.logout()">Sair</button>
+            </div>
+
+            <div class="section">
+                <h2>Notificações de Senha</h2>
+                <button class="btn" onclick="app.fetchNotificacoes()">Atualizar Notificações</button>
+                <ul id="notificacoes-list"></ul>
+            </div>
+
+            <div class="section">
+                <h2>Novo Acesso</h2>
+                <div id="acesso-message" class="message" style="display:none;"></div>
+                <div class="form-group">
+                    <label for="acesso-titulo">Título:</label>
+                    <input type="text" id="acesso-titulo">
+                </div>
+                <div class="form-group">
+                    <label for="acesso-url">URL:</label>
+                    <input type="text" id="acesso-url">
+                </div>
+                <div class="form-group">
+                    <label for="acesso-login">Login:</label>
+                    <input type="text" id="acesso-login">
+                </div>
+                <div class="form-group">
+                    <label for="acesso-senha">Senha:</label>
+                    <input type="password" id="acesso-senha">
+                </div>
+                <div class="form-group">
+                    <label for="acesso-visibilidade">Visibilidade:</label>
+                    <select id="acesso-visibilidade">
+                        <option value="PESSOAL">PESSOAL (Só eu vejo)</option>
+                        <option value="COMPARTILHADA">COMPARTILHADA (Todos veem - Apenas ADMIN)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="acesso-expiracao">Data de Expiração (AAAA-MM-DD):</label>
+                    <input type="date" id="acesso-expiracao">
+                </div>
+                <button class="btn" onclick="app.criarAcesso()">Salvar Acesso</button>
+            </div>
+
+            <div class="section">
+                <h2>Meus Acessos Visíveis</h2>
+                <button class="btn" onclick="app.fetchAcessos()">Atualizar Lista</button>
+                <div id="acessos-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
